@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
@@ -20,7 +19,7 @@ export default function RootLayout({
       <body
         className={`${outfit.className} antialiased mx-auto min-h-screen flex flex-col`}
       >
-          <main className="flex-grow">{children}</main>
+        <main className="flex-grow">{children}</main>
       </body>
     </html>
   );
