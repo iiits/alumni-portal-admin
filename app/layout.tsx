@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
+import Providers from "./provider";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -19,7 +20,9 @@ export default function RootLayout({
       <body
         className={`${outfit.className} antialiased mx-auto min-h-screen flex flex-col`}
       >
-        <main className="flex-grow">{children}</main>
+        <Providers>
+          <main className="flex-grow">{children}</main>
+        </Providers>
       </body>
     </html>
   );
