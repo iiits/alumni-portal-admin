@@ -3,10 +3,15 @@ import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 
 import {
-  IconBrandTabler,
+  IconBriefcase2,
+  IconCalendarEvent,
+  IconChartLine,
+  IconFileDescription,
+  IconHome,
   IconLogout,
-  IconSettings,
-  IconUserBolt,
+  IconMessageCircle,
+  IconSchool,
+  IconUserCog,
 } from "@tabler/icons-react";
 
 import { useUserStore } from "@/lib/store";
@@ -82,24 +87,59 @@ export default function AdminLayout({
 
 const links = [
   {
-    label: "Dashboard A",
-    href: "#",
+    label: "Analytics",
+    href: "/",
     icon: (
-      <IconBrandTabler className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+      <IconChartLine className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
     ),
   },
   {
-    label: "Dashboard B",
-    href: "#",
+    label: "Users",
+    href: "/users",
     icon: (
-      <IconUserBolt className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+      <IconUserCog className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
     ),
   },
   {
-    label: "Dashboard C",
-    href: "#",
+    label: "Alumni",
+    href: "/alumni",
     icon: (
-      <IconSettings className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+      <IconSchool className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+    ),
+  },
+  {
+    label: "Events",
+    href: "/events",
+    icon: (
+      <IconCalendarEvent className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+    ),
+  },
+  {
+    label: "Jobs",
+    href: "/jobs",
+    icon: (
+      <IconBriefcase2 className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+    ),
+  },
+  {
+    label: "Referrals",
+    href: "/referrals",
+    icon: (
+      <IconFileDescription className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+    ),
+  },
+  {
+    label: "Contact Us",
+    href: "/contactus",
+    icon: (
+      <IconMessageCircle className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+    ),
+  },
+  {
+    label: "Homepage CMS",
+    href: "/homepage",
+    icon: (
+      <IconHome className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
     ),
   },
 ];
