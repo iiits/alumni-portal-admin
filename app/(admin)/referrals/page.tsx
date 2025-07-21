@@ -1,22 +1,17 @@
+import Referrals from "@/components/Pages/Referrals/Referrals";
+
 export default function ReferralPage() {
   return (
-    <>
-      <div className="flex gap-2">
-        {[...new Array(4)].map((i, idx) => (
-          <div
-            key={"first-array-demo-1" + idx}
-            className="h-20 w-full animate-pulse rounded-lg bg-gray-100 dark:bg-neutral-800"
-          ></div>
-        ))}
-      </div>
-      <div className="flex flex-1 gap-2">
-        {[...new Array(2)].map((i, idx) => (
-          <div
-            key={"second-array-demo-1" + idx}
-            className="h-full w-full animate-pulse rounded-lg bg-gray-100 dark:bg-neutral-800"
-          ></div>
-        ))}
-      </div>
-    </>
+    <div className="h-screen overflow-y-auto p-6">
+      <h1 className="lg:mb-2 text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
+        Referrals Dashboard
+      </h1>
+      <p className="text-sm lg:text-lg text-gray-600 dark:text-gray-300 mb-6">
+        Track and analyze key metrics about referrals and create referral
+        requests.
+      </p>
+      <hr className="border-t border-gray-200 dark:border-gray-700 mb-8" />
+      <Referrals />
+    </div>
   );
 }
