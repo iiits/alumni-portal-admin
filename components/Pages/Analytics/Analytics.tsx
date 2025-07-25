@@ -1,12 +1,51 @@
+"use client";
+
+import NoData from "@/components/Commons/NoData";
+import Searching from "@/components/Commons/Searching";
+import { axiosInstance } from "@/lib/api/axios";
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import { DashboardAnalytics } from "./interface";
 
 const Analytics: React.FC = () => {
+  const { data, error, isLoading } = useQuery<DashboardAnalytics>({
+    queryKey: ["dashboardAnalytics"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/admin/dashboard");
+      return response.data.data;
+    },
+  });
+
+  if (isLoading)
+    return (
+      <Searching
+        message="Loading Analytics..."
+        description="Please wait while we fetch the latest analytics data."
+      />
+    );
+  if (error)
+    return (
+      <NoData
+        message="Error loading Analytics"
+        description={error.message}
+        url="/analytics"
+      />
+    );
+  if (!data)
+    return (
+      <NoData
+        message="No Analytics Data Found"
+        description="Please check back later."
+        url="/analytics"
+      />
+    );
+
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[...new Array(4)].map((i, idx) => (
           <div
-            key={"analytics-card-" + idx}
+            key={"referrals-card-" + idx}
             className="h-24 p-4 rounded-lg bg-gray-100 dark:bg-neutral-800 shadow-sm"
           ></div>
         ))}
@@ -14,7 +53,7 @@ const Analytics: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {[...new Array(6)].map((i, idx) => (
           <div
-            key={"analytics-chart-" + idx}
+            key={"referrals-chart-" + idx}
             className="h-[300px] rounded-lg bg-gray-100 dark:bg-neutral-800 shadow-sm p-4"
           ></div>
         ))}
