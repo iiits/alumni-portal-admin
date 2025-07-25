@@ -2,7 +2,7 @@ import Users from "@/components/Pages/Users/Users";
 
 export default function UserPage() {
   return (
-    <div className="h-screen overflow-y-auto p-6">
+    <div className="h-screen overflow-y-auto p-4">
       <h1 className="lg:mb-2 text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
         Users Dashboard
       </h1>
