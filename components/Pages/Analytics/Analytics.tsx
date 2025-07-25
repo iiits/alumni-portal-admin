@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import Events from "./Events";
 import { DashboardAnalytics } from "./interface";
+import JobsReferrals from "./JobsReferrals";
 import Users from "./Users";
 
 const Analytics: React.FC = () => {
@@ -43,12 +44,13 @@ const Analytics: React.FC = () => {
       />
     );
 
-  const { users, events } = data;
+  const { users, events, jobs, referrals } = data;
 
   return (
     <div className="space-y-8">
       <Users users={users} />
       <Events events={events} />
+      <JobsReferrals jobs={jobs} referrals={referrals} />
     </div>
   );
 };
