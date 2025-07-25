@@ -33,6 +33,37 @@ import {
 
 import { ChevronDown } from "lucide-react";
 import * as React from "react";
+import { useState } from "react";
+
+function generateReport(data: any[], format: "csv" | "json", filename: string) {
+  if (format === "json") {
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename + ".json";
+    a.click();
+    URL.revokeObjectURL(url);
+  } else {
+    // CSV
+    if (!data.length) return;
+    const keys = Object.keys(data[0]);
+    const csvRows = [keys.join(",")].concat(
+      data.map((row) =>
+        keys.map((k) => JSON.stringify(row[k] ?? "")).join(","),
+      ),
+    );
+    const blob = new Blob([csvRows.join("\n")], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename + ".csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+}
 
 export type DataListProps<T> = {
   data: T[];
@@ -59,13 +90,16 @@ const DataList = <T,>({
   searchText,
   onSearchChange,
   placeholder,
-}: DataListProps<T>) => {
+  onReportAll,
+}: DataListProps<T> & { onReportAll?: () => Promise<T[]> }) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
+  const [reportType, setReportType] = useState<"current" | "all">("current");
+  const [downloading, setDownloading] = useState(false);
 
   const table = useReactTable({
     data,
@@ -85,6 +119,18 @@ const DataList = <T,>({
     pageCount: pagination?.totalPages,
   });
 
+  const handleReportDownload = async (format: "csv" | "json") => {
+    setDownloading(true);
+    let reportData: T[] = [];
+    if (reportType === "current") {
+      reportData = data;
+    } else if (reportType === "all" && onReportAll) {
+      reportData = await onReportAll();
+    }
+    generateReport(reportData, format, `report_${reportType}`);
+    setDownloading(false);
+  };
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
@@ -98,6 +144,7 @@ const DataList = <T,>({
             className="max-w-sm"
           />
         )}
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -124,7 +171,53 @@ const DataList = <T,>({
               })}
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-2">
+              Generate Report
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <div className="px-2 py-1">
+              <label className="text-xs font-medium">Type:</label>
+              <select
+                className="border rounded px-2 py-1 text-xs min-w-[120px]"
+                value={reportType}
+                onChange={(e) =>
+                  setReportType(e.target.value as "current" | "all")
+                }
+              >
+                <option value="current">
+                  Current View ({data.length} rows)
+                </option>
+                <option value="all">
+                  All ({pagination?.total ?? data.length} rows)
+                </option>
+              </select>
+            </div>
+            <div className="flex flex-col gap-1 px-2 py-1">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={downloading}
+                onClick={() => handleReportDownload("csv")}
+              >
+                Download CSV
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={downloading}
+                onClick={() => handleReportDownload("json")}
+              >
+                Download JSON
+              </Button>
+            </div>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
+
       <div className="overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
@@ -173,6 +266,7 @@ const DataList = <T,>({
           </TableBody>
         </Table>
       </div>
+
       <div className="flex items-center justify-between py-4">
         <div className="flex items-center space-x-2">
           <span className="text-sm">Rows per page:</span>
@@ -189,6 +283,7 @@ const DataList = <T,>({
             placeholder="Per page"
           />
         </div>
+
         <div className="flex items-center space-x-2">
           <Button
             variant="outline"
