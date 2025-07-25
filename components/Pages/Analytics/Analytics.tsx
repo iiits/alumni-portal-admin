@@ -5,6 +5,7 @@ import Searching from "@/components/Commons/Searching";
 import { axiosInstance } from "@/lib/api/axios";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import Events from "./Events";
 import { DashboardAnalytics } from "./interface";
 import Users from "./Users";
 
@@ -42,9 +43,14 @@ const Analytics: React.FC = () => {
       />
     );
 
-  const { users } = data;
+  const { users, events } = data;
 
-  return <Users users={users} />;
+  return (
+    <div className="space-y-8">
+      <Users users={users} />
+      <Events events={events} />
+    </div>
+  );
 };
 
 export default Analytics;

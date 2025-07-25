@@ -53,7 +53,8 @@ const Users: React.FC<UsersProps> = ({ users }) => {
   }));
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 shadow-md p-2">
+      <h2 className="text-3xl font-semibold mt-4 ml-4">User Analytics</h2>
       <div className="grid h-full w-full gap-4 grid-cols-1 grid-rows-6 lg:grid-rows-7 xl:grid-rows-4 xl:grid-cols-2">
         <div className="row-span-1 grid h-full w-full gap-4 grid-cols-3 lg:grid-cols-7 xl:grid-cols-3 2xl:grid-cols-7 lg:grid-rows-1 xl:grid-rows-1 2xl:grid-rows-1">
           <div className="col-span-3 lg:col-span-4 xl:col-span-3 2xl:col-span-4 row-span-1 flex items-center justify-around gap-4">
@@ -101,7 +102,7 @@ const Users: React.FC<UsersProps> = ({ users }) => {
           ))}
         </div>
 
-        <div className="col-span-1 row-span-2 lg:row-span-3 xl:row-span-4 max-xl:order-3 bg-gray-50 dark:bg-neutral-800 rounded-lg p-4 shadow-sm">
+        <div className="col-span-1 row-span-2 lg:row-span-3 xl:row-span-4 max-xl:order-3 rounded-lg p-4 shadow-sm">
           <TimelineChart
             data={users.timeline["1d"]}
             lines={[{ key: "count", color: "#6366f1", label: "Users" }]}
@@ -123,7 +124,7 @@ const Users: React.FC<UsersProps> = ({ users }) => {
         </div>
       </div>
 
-      <div className="bg-gray-50 dark:bg-neutral-800 rounded-lg shadow-sm p-4 min-h-fit h-[400px]">
+      <div className="rounded-lg shadow-sm p-4 min-h-fit h-[400px]">
         <div className="mb-2 font-semibold">User Growth (30d Timeline)</div>
         <TimelineChart
           data={users.timeline["30d"]}
