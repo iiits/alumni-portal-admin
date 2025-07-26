@@ -14,7 +14,6 @@ const Events: React.FC = () => {
     queryKey: ["eventsAnalytics"],
     queryFn: async () => {
       const response = await axiosInstance.get("/admin/events-analytics");
-      console.log(response.data.data);
       return response.data.data;
     },
   });

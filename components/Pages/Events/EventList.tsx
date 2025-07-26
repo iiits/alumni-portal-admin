@@ -8,7 +8,7 @@ import NoData from "@/components/Commons/NoData";
 import Searching from "@/components/Commons/Searching";
 import { Button } from "@/components/ui/button";
 import { EyeIcon } from "lucide-react";
-import EditUserModal from "./EditUserModal";
+import EditEventModal from "./EditEventModal";
 import EventsFilter from "./EventListFilter";
 
 interface ListProps {
@@ -192,8 +192,8 @@ const EventList: React.FC<ListProps> = ({ mainRefetch }) => {
       id: "actions",
       header: "Show More",
       cell: ({ row }: { row: { original: any } }) => (
-        <EditUserModal
-          user={row.original}
+        <EditEventModal
+          event={row.original}
           trigger={
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Show details</span>
