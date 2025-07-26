@@ -101,6 +101,22 @@ const DataList = <T,>({
   const [reportType, setReportType] = useState<"current" | "all">("current");
   const [downloading, setDownloading] = useState(false);
 
+  // Local state for controlled pagination inputs
+  const [pageInput, setPageInput] = React.useState(
+    pagination?.currentPage || 1,
+  );
+  const [perPageInput, setPerPageInput] = React.useState(
+    pagination?.perPage || 1,
+  );
+
+  // Keep local state in sync with props
+  React.useEffect(() => {
+    setPageInput(pagination?.currentPage || 1);
+  }, [pagination?.currentPage]);
+  React.useEffect(() => {
+    setPerPageInput(pagination?.perPage || 1);
+  }, [pagination?.perPage]);
+
   const table = useReactTable({
     data,
     columns,
@@ -132,7 +148,7 @@ const DataList = <T,>({
   };
 
   return (
-    <div className="w-full">
+    <div className={`w-full mx-auto md:px-3 md:max-w-[calc(100vw-7rem)]`}>
       <div className="flex items-center py-4">
         {searchKey && (
           <Input
@@ -218,7 +234,7 @@ const DataList = <T,>({
         </DropdownMenu>
       </div>
 
-      <div className="overflow-hidden rounded-md border">
+      <div className="overflow-auto rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -267,17 +283,29 @@ const DataList = <T,>({
         </Table>
       </div>
 
-      <div className="flex items-center justify-between py-4">
+      <div className="flex max-sm:flex-col gap-3 items-center justify-between py-4">
         <div className="flex items-center space-x-2">
           <span className="text-sm">Rows per page:</span>
           <input
             type="number"
             min={1}
             max={100}
-            value={pagination?.perPage || 1}
+            value={perPageInput === 0 ? "" : perPageInput}
             onChange={(e) => {
-              const val = Math.max(1, Math.min(Number(e.target.value), 100));
-              if (pagination?.onPerPageChange) pagination.onPerPageChange(val);
+              const val = e.target.value === "" ? 0 : Number(e.target.value);
+              setPerPageInput(val);
+              if (
+                val >= 1 &&
+                val <= 100 &&
+                pagination?.onPerPageChange &&
+                val !== pagination.perPage
+              ) {
+                pagination.onPerPageChange(val);
+              }
+            }}
+            onBlur={() => {
+              if (!perPageInput || perPageInput < 1)
+                setPerPageInput(pagination?.perPage || 1);
             }}
             className="border rounded px-2 py-1 w-16 text-center text-sm"
             placeholder="Per page"
@@ -302,13 +330,22 @@ const DataList = <T,>({
             type="number"
             min={1}
             max={pagination?.totalPages || 1}
-            value={pagination?.currentPage || 1}
+            value={pageInput === 0 ? "" : pageInput}
             onChange={(e) => {
-              const val = Math.max(
-                1,
-                Math.min(Number(e.target.value), pagination?.totalPages || 1),
-              );
-              if (pagination?.onPageChange) pagination.onPageChange(val);
+              const val = e.target.value === "" ? 0 : Number(e.target.value);
+              setPageInput(val);
+              if (
+                val >= 1 &&
+                val <= (pagination?.totalPages || 1) &&
+                pagination?.onPageChange &&
+                val !== pagination.currentPage
+              ) {
+                pagination.onPageChange(val);
+              }
+            }}
+            onBlur={() => {
+              if (!pageInput || pageInput < 1)
+                setPageInput(pagination?.currentPage || 1);
             }}
             className="border rounded px-2 py-1 w-16 text-center text-sm"
           />

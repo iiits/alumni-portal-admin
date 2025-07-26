@@ -8,13 +8,13 @@ import React from "react";
 import BatchDepartment from "./BatchDepartment";
 import { UserAnalytics } from "./interface";
 import Overview from "./Overview";
+import UserList from "./UserList";
 
 const Users: React.FC = () => {
   const { data, error, isLoading } = useQuery<UserAnalytics>({
     queryKey: ["userAnalytics"],
     queryFn: async () => {
       const response = await axiosInstance.get("/admin/users-analytics");
-      console.log(response.data.data);
       return response.data.data;
     },
   });
@@ -49,6 +49,7 @@ const Users: React.FC = () => {
     <div className="space-y-8">
       <Overview users={overview} unverified={unverified} />
       <BatchDepartment byBatch={byBatch} byDepartment={byDepartment} />
+      <UserList />
     </div>
   );
 };
