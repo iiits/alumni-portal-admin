@@ -5,11 +5,12 @@ import Searching from "@/components/Commons/Searching";
 import { axiosInstance } from "@/lib/api/axios";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import EventList from "./EventList";
 import { EventsAnalytics } from "./interface";
 import Overview from "./Overview";
 
 const Events: React.FC = () => {
-  const { data, error, isLoading } = useQuery<EventsAnalytics>({
+  const { data, error, isLoading, refetch } = useQuery<EventsAnalytics>({
     queryKey: ["eventsAnalytics"],
     queryFn: async () => {
       const response = await axiosInstance.get("/admin/events-analytics");
@@ -45,6 +46,7 @@ const Events: React.FC = () => {
   return (
     <div className="space-y-8">
       <Overview events={data} />
+      <EventList mainRefetch={refetch} />
     </div>
   );
 };
