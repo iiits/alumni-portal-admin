@@ -8,8 +8,8 @@ import NoData from "@/components/Commons/NoData";
 import Searching from "@/components/Commons/Searching";
 import { Button } from "@/components/ui/button";
 import { EyeIcon, PlusIcon } from "lucide-react";
-import CreateEventModal from "./CreateEventModal";
-import EditEventModal from "./EditEventModal";
+import CreateJobModal from "./CreateJobModal";
+import EditJobModal from "./EditJobModal";
 import JobsFilter from "./JobListFilter";
 
 interface ListProps {
@@ -215,8 +215,8 @@ const JobList: React.FC<ListProps> = ({ mainRefetch }) => {
       id: "actions",
       header: "Show More",
       cell: ({ row }: { row: { original: any } }) => (
-        <EditEventModal
-          event={row.original}
+        <EditJobModal
+          job={row.original}
           trigger={
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Show details</span>
@@ -244,7 +244,7 @@ const JobList: React.FC<ListProps> = ({ mainRefetch }) => {
           onFilterChange={handleFilterChange}
           isChanged={isFilterChanged}
         />
-        <CreateEventModal
+        <CreateJobModal
           onSuccess={() => {
             refetch();
             mainRefetch();
