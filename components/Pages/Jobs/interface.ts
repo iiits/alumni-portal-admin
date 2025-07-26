@@ -2,16 +2,8 @@ export interface JobsAnalytics {
   total: number;
   future: number;
   past: number;
-  typeStats: {
-    future: Record<string, number>;
-    past: Record<string, number>;
-    total: Record<string, number>;
-  };
-  workTypeStats: {
-    future: Record<string, number>;
-    past: Record<string, number>;
-    total: Record<string, number>;
-  };
+  typeStats: TypeStats;
+  workTypeStats: WorkTypeStats;
   uniqueCompanies: number;
   topCompanies: Array<{ count: number; name: string }>;
   uniqueRoles: number;
@@ -23,4 +15,19 @@ export interface JobsAnalytics {
     role: string;
     count: number;
   }>;
+}
+
+type JobType = "fulltime" | "parttime" | "internship" | "others";
+type workType = "remote" | "onsite" | "hybrid";
+
+export interface TypeStats {
+  future: Record<JobType, number>;
+  past: Record<JobType, number>;
+  total: Record<JobType, number>;
+}
+
+export interface WorkTypeStats {
+  future: Record<workType, number>;
+  past: Record<workType, number>;
+  total: Record<workType, number>;
 }
