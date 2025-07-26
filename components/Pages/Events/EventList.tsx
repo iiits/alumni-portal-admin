@@ -7,7 +7,8 @@ import DataList from "@/components/Commons/DataList";
 import NoData from "@/components/Commons/NoData";
 import Searching from "@/components/Commons/Searching";
 import { Button } from "@/components/ui/button";
-import { EyeIcon } from "lucide-react";
+import { EyeIcon, PlusIcon } from "lucide-react";
+import CreateEventModal from "./CreateEventModal";
 import EditEventModal from "./EditEventModal";
 import EventsFilter from "./EventListFilter";
 
@@ -212,14 +213,28 @@ const EventList: React.FC<ListProps> = ({ mainRefetch }) => {
   ];
 
   return (
-    <div className="space-y-8 shadow-md p-2">
-      <h2 className="text-3xl font-semibold mt-4 ml-4">Manage Events</h2>
-      <EventsFilter
-        filters={currentFilters}
-        setFilters={setCurrentFilters}
-        onFilterChange={handleFilterChange}
-        isChanged={isFilterChanged}
-      />
+    <div className="space-y-2 shadow-md p-2">
+      <h2 className="text-3xl font-semibold mt-4 ml-4 mb-6">Manage Events</h2>
+      <div className="flex flex-wrap gap-2 justify-between items-center px-2">
+        <EventsFilter
+          filters={currentFilters}
+          setFilters={setCurrentFilters}
+          onFilterChange={handleFilterChange}
+          isChanged={isFilterChanged}
+        />
+        <CreateEventModal
+          onSuccess={() => {
+            refetch();
+            mainRefetch();
+          }}
+          trigger={
+            <Button variant="default" className="flex gap-2 items-center">
+              <PlusIcon className="w-4 h-4" />
+              <span>Create new event</span>
+            </Button>
+          }
+        />
+      </div>
       <DataList
         data={data.events}
         columns={showColumns}

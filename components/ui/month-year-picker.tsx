@@ -42,6 +42,9 @@ export function MonthYearPicker({
       const [m, y] = value.split("-");
       setSelectedMonth(months.findIndex((mon) => mon === m));
       setSelectedYear(Number(y));
+    } else {
+      setSelectedMonth(null);
+      setSelectedYear(null);
     }
   }, [value]);
 
