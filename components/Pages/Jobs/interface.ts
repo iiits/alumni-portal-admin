@@ -31,3 +31,39 @@ export interface WorkTypeStats {
   past: Record<workType, number>;
   total: Record<workType, number>;
 }
+
+export interface Job {
+  id: string;
+  jobName: string;
+  company: string;
+  role: string;
+  eligibility: {
+    batch: string[];
+    requirements: string[];
+  };
+  description: string;
+  type: string;
+  stipend: string;
+  duration: string;
+  workType: string;
+  links: string[];
+  postedBy: {
+    name: string;
+    collegeEmail: string;
+    personalEmail: string;
+    id: string;
+  };
+  postedOn: Date;
+  lastApplyDate: Date;
+}
+
+export interface JobFilters {
+  page?: string;
+  limit?: string;
+  search?: string;
+  startMonthYear?: string;
+  endMonthYear?: string;
+  dateField?: string;
+  type?: string;
+  workType?: string;
+}

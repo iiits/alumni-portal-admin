@@ -5,13 +5,14 @@ import Searching from "@/components/Commons/Searching";
 import { axiosInstance } from "@/lib/api/axios";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import JobList from "./JobList";
 import { JobsAnalytics } from "./interface";
 import Overview from "./Overview";
 import Stats from "./Stats";
 import TopJobs from "./TopJobs";
 
 const Jobs: React.FC = () => {
-  const { data, error, isLoading } = useQuery<JobsAnalytics>({
+  const { data, error, isLoading, refetch } = useQuery<JobsAnalytics>({
     queryKey: ["jobsAnalytics"],
     queryFn: async () => {
       const response = await axiosInstance.get("/admin/jobs-analytics");
@@ -48,6 +49,7 @@ const Jobs: React.FC = () => {
       <Overview jobs={data} />
       <Stats typeStats={data.typeStats} workTypeStats={data.workTypeStats} />
       <TopJobs jobs={data} />
+      <JobList mainRefetch={refetch} />
     </div>
   );
 };

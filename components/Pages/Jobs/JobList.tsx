@@ -1,0 +1,274 @@
+import { axiosInstance } from "@/lib/api/axios";
+import { useQuery } from "@tanstack/react-query";
+import React, { useRef, useState } from "react";
+import { Job, JobFilters } from "./interface";
+
+import DataList from "@/components/Commons/DataList";
+import NoData from "@/components/Commons/NoData";
+import Searching from "@/components/Commons/Searching";
+import { Button } from "@/components/ui/button";
+import { EyeIcon, PlusIcon } from "lucide-react";
+import CreateEventModal from "./CreateEventModal";
+import EditEventModal from "./EditEventModal";
+import JobsFilter from "./JobListFilter";
+
+interface ListProps {
+  mainRefetch: () => void;
+}
+
+const JobList: React.FC<ListProps> = ({ mainRefetch }) => {
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
+  const [appliedFilters, setAppliedFilters] = useState<JobFilters>({
+    page: "1",
+    limit: "10",
+    search: "",
+    startMonthYear: "",
+    endMonthYear: "",
+    dateField: "",
+    type: "",
+    workType: "",
+  });
+
+  const [currentFilters, setCurrentFilters] = useState<JobFilters>({
+    page: "1",
+    limit: "10",
+    search: "",
+    startMonthYear: "",
+    endMonthYear: "",
+    dateField: "",
+    type: "",
+    workType: "",
+  });
+
+  interface DataListProps {
+    jobs: Job[];
+    pagination: {
+      currentPage: number;
+      perPage: number;
+      total: number;
+      totalPages: number;
+    };
+  }
+
+  const { data, error, isLoading, refetch } = useQuery<DataListProps>({
+    queryKey: ["jobList", appliedFilters],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      if (appliedFilters.page) params.append("page", appliedFilters.page);
+      if (appliedFilters.limit) params.append("limit", appliedFilters.limit);
+      if (appliedFilters.search) params.append("search", appliedFilters.search);
+      if (appliedFilters.startMonthYear)
+        params.append("startMonthYear", appliedFilters.startMonthYear);
+      if (appliedFilters.endMonthYear)
+        params.append("endMonthYear", appliedFilters.endMonthYear);
+      if (appliedFilters.dateField)
+        params.append("dateField", appliedFilters.dateField);
+      if (appliedFilters.type) params.append("type", appliedFilters.type);
+      if (appliedFilters.workType)
+        params.append("workType", appliedFilters.workType);
+
+      const response = await axiosInstance.get("/jobs", { params });
+      return response.data?.data;
+    },
+  });
+
+  const fetchAllJobData = async () => {
+    const params = new URLSearchParams();
+    params.append("page", "1");
+    params.append("limit", data?.pagination.total.toString() || "1000");
+    const response = await axiosInstance.get("/jobs", { params });
+    return response.data?.data.jobs;
+  };
+
+  if (isLoading)
+    return (
+      <Searching
+        message="Loading Job List..."
+        description="Please wait while we fetch the latest job list data."
+      />
+    );
+  if (error)
+    return (
+      <NoData
+        message="Error loading Job List"
+        description={error.message}
+        url="/jobs"
+      />
+    );
+  if (!data)
+    return (
+      <NoData
+        message="No Job List Found"
+        description="Please check back later."
+        url="/jobs"
+      />
+    );
+
+  const handlePageChange = (page: number) => {
+    setCurrentFilters((prev) => ({ ...prev, page: String(page) }));
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      setAppliedFilters((prev) => ({ ...prev, page: String(page) }));
+      refetch();
+    }, 1000);
+  };
+
+  const handlePerPageChange = (perPage: number) => {
+    setCurrentFilters((prev) => ({ ...prev, limit: String(perPage) }));
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      setAppliedFilters((prev) => ({ ...prev, limit: String(perPage) }));
+      refetch();
+    }, 1000);
+  };
+
+  const pagination = {
+    total: data.pagination.total,
+    totalPages: data.pagination.totalPages,
+    currentPage: data.pagination.currentPage,
+    perPage: data.pagination.perPage,
+    onPageChange: handlePageChange,
+    onPerPageChange: handlePerPageChange,
+  };
+
+  const handleFilterChange = () => {
+    setAppliedFilters(currentFilters);
+  };
+
+  const isFilterChanged =
+    JSON.stringify(appliedFilters) !== JSON.stringify(currentFilters);
+
+  const handleSearchChange = (text: string) => {
+    setCurrentFilters((prev) => ({
+      ...prev,
+      search: text,
+      page: "1",
+    }));
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      setAppliedFilters((prev) => ({
+        ...prev,
+        search: text,
+        page: "1",
+      }));
+      refetch();
+    }, 600);
+  };
+
+  const showColumns = [
+    {
+      accessorKey: "jobName",
+      header: "Job Name",
+    },
+    {
+      accessorKey: "company",
+      header: "Company",
+    },
+    {
+      accessorKey: "role",
+      header: "Role",
+    },
+    {
+      accessorKey: "eligibility.batch",
+      header: "Batch",
+      cell: ({ row }: { row: { original: Job } }) => (
+        <span>{row.original.eligibility.batch.join(", ")}</span>
+      ),
+    },
+    {
+      accessorKey: "type",
+      header: "Type",
+    },
+    {
+      accessorKey: "workType",
+      header: "Work Type",
+    },
+    {
+      accessorKey: "postedBy.name",
+      header: "Posted By",
+      cell: ({ row }: { row: { original: Job } }) => (
+        <span>{row.original.postedBy?.name || "-"}</span>
+      ),
+    },
+    {
+      accessorKey: "postedOn",
+      header: "Posted On",
+      cell: ({ row }: { row: { original: Job } }) => {
+        const date = row.original.postedOn
+          ? new Date(row.original.postedOn)
+          : null;
+        return <span>{date ? date.toLocaleDateString() : "-"}</span>;
+      },
+    },
+    {
+      accessorKey: "lastApplyDate",
+      header: "Last Apply",
+      cell: ({ row }: { row: { original: Job } }) => {
+        const date = row.original.lastApplyDate
+          ? new Date(row.original.lastApplyDate)
+          : null;
+        return <span>{date ? date.toLocaleDateString() : "-"}</span>;
+      },
+    },
+    {
+      id: "actions",
+      header: "Show More",
+      cell: ({ row }: { row: { original: any } }) => (
+        <EditEventModal
+          event={row.original}
+          trigger={
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Show details</span>
+              <EyeIcon />
+            </Button>
+          }
+          onSuccess={() => {
+            refetch();
+            mainRefetch();
+          }}
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+  ];
+
+  return (
+    <div className="space-y-2 shadow-md p-2">
+      <h2 className="text-3xl font-semibold mt-4 ml-4 mb-6">Manage Jobs</h2>
+      <div className="flex flex-wrap gap-2 justify-between items-center px-2">
+        <JobsFilter
+          filters={currentFilters}
+          setFilters={setCurrentFilters}
+          onFilterChange={handleFilterChange}
+          isChanged={isFilterChanged}
+        />
+        <CreateEventModal
+          onSuccess={() => {
+            refetch();
+            mainRefetch();
+          }}
+          trigger={
+            <Button variant="default" className="flex gap-2 items-center">
+              <PlusIcon className="w-4 h-4" />
+              <span>Create new job</span>
+            </Button>
+          }
+        />
+      </div>
+      <DataList
+        data={data.jobs}
+        columns={showColumns}
+        pagination={pagination}
+        searchKey="jobName"
+        searchText={currentFilters.search}
+        onSearchChange={handleSearchChange}
+        placeholder="Search job by name, company or poster's name..."
+        onReportAll={fetchAllJobData}
+      />
+    </div>
+  );
+};
+
+export default JobList;
