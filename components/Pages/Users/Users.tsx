@@ -5,6 +5,7 @@ import Searching from "@/components/Commons/Searching";
 import { axiosInstance } from "@/lib/api/axios";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import BatchDepartment from "./BatchDepartment";
 import { UserAnalytics } from "./interface";
 import Overview from "./Overview";
 
@@ -47,6 +48,7 @@ const Users: React.FC = () => {
   return (
     <div className="space-y-8">
       <Overview users={overview} unverified={unverified} />
+      <BatchDepartment byBatch={byBatch} byDepartment={byDepartment} />
     </div>
   );
 };
