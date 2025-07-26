@@ -36,7 +36,7 @@ function DataTable<T extends Record<string, any>>({
   }, [data]);
 
   return (
-    <div className="bg-white dark:bg-neutral-900 rounded-lg shadow p-4 h-full flex flex-col justify-around md:justify-between gap-3">
+    <div className="bg-white dark:bg-neutral-900 rounded-lg shadow p-4 h-full flex flex-col justify-around md:justify-between gap-6 max-h-fit">
       {heading && (
         <h2 className="text-xl lg:text-2xl text-center font-semibold">
           {heading}

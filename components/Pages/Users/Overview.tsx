@@ -1,13 +1,14 @@
 import React from "react";
 
-import DataTable from "@/components/Commons/DataTable";
 import TimelineChart from "@/components/Commons/TimelineChart";
 
+import DataTable from "@/components/Commons/DataTable";
 import { ArrowDown, ArrowUp, Minus } from "lucide-react";
-import { UsersAnalytics } from "./interface";
+import { Overview as OverviewI, Unverified } from "./interface";
 
-interface UsersProps {
-  users: UsersAnalytics;
+interface OverviewProps {
+  users: OverviewI;
+  unverified: Unverified;
 }
 
 function getGrowthColor(rate: number) {
@@ -28,7 +29,7 @@ function getGrowthIcon(rate: number) {
   return <Minus className="inline w-5 h-5" />;
 }
 
-const Users: React.FC<UsersProps> = ({ users }) => {
+const Overview: React.FC<OverviewProps> = ({ users, unverified }) => {
   const growthCards = [
     {
       label: "1 Day",
@@ -54,10 +55,10 @@ const Users: React.FC<UsersProps> = ({ users }) => {
 
   return (
     <div className="space-y-8 shadow-md p-2">
-      <h2 className="text-3xl font-semibold mt-4 ml-4">User Analytics</h2>
-      <div className="grid h-full w-full gap-4 grid-cols-1 grid-rows-6 lg:grid-rows-7 xl:grid-rows-4 xl:grid-cols-2">
-        <div className="row-span-1 grid h-full w-full gap-4 grid-cols-3 lg:grid-cols-7 xl:grid-cols-3 2xl:grid-cols-7">
-          <div className="col-span-3 lg:col-span-4 xl:col-span-3 2xl:col-span-4 row-span-1 flex items-center justify-around gap-4">
+      <h2 className="text-3xl font-semibold mt-4 ml-4">User Overview</h2>
+      <div className="grid h-full w-full gap-4 grid-cols-1 grid-rows-2 xl:grid-rows-1 xl:grid-cols-2">
+        <div className="row-span-1 xl:row-span-2 col-span-2 xl:col-span-1 grid h-full w-full gap-4 grid-cols-3 lg:grid-cols-7 xl:grid-cols-3">
+          <div className="col-span-3 lg:col-span-4 xl:col-span-3 row-span-1 flex items-center justify-around gap-4">
             <div className="flex flex-col md:flex-row justify-center md:items-end md:gap-3">
               <div className="text-7xl md:text-8xl font-bold">
                 {users.total}
@@ -102,26 +103,27 @@ const Users: React.FC<UsersProps> = ({ users }) => {
           ))}
         </div>
 
-        <div className="col-span-1 row-span-2 lg:row-span-3 xl:row-span-4 max-xl:order-3 rounded-lg p-4 shadow-sm">
-          <TimelineChart
-            data={users.timeline["1d"]}
-            lines={[{ key: "count", color: "#6366f1", label: "Users" }]}
-            xKey="date"
-            xLabel="Time (Last 24hrs)"
-            yLabel="Users"
-            height={200}
-            showAxes={true}
-            showBrush={true}
-          />
-        </div>
-
-        <div className="col-span-1 row-span-3 lg:row-span-3 xl:row-span-3">
+        <div className="row-span-1 xl:row-span-2 col-span-2 xl:col-span-1">
           <DataTable
-            data={users.recentUsers}
-            heading="Recent Users"
+            data={unverified.users}
+            heading="Unverified Users"
             seeMoreUrl="/users"
           />
         </div>
+      </div>
+
+      <div className="rounded-lg shadow-sm p-4 min-h-fit h-[400px]">
+        <div className="mb-2 font-semibold">User Growth (24hr Timeline)</div>
+        <TimelineChart
+          data={users.timeline["1d"]}
+          lines={[{ key: "count", color: "#6366f1", label: "Users" }]}
+          xKey="date"
+          xLabel="Hours"
+          yLabel="Users"
+          height={250}
+          showAxes={true}
+          showBrush={true}
+        />
       </div>
 
       <div className="rounded-lg shadow-sm p-4 min-h-fit h-[400px]">
@@ -141,4 +143,4 @@ const Users: React.FC<UsersProps> = ({ users }) => {
   );
 };
 
-export default Users;
+export default Overview;

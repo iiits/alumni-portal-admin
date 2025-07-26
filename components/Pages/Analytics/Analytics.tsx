@@ -16,7 +16,6 @@ const Analytics: React.FC = () => {
     queryKey: ["dashboardAnalytics"],
     queryFn: async () => {
       const response = await axiosInstance.get("/admin/dashboard");
-      console.log(response.data.data);
       return response.data.data;
     },
   });
