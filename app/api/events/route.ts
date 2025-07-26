@@ -129,7 +129,7 @@ export async function GET(req: NextRequest) {
     const token = req.cookies.get("token")?.value;
     if (!token) {
       return NextResponse.json(
-        { message: "Unauthorized. Please login to view job postings." },
+        { message: "Unauthorized. Please login to view event postings." },
         { status: 401 },
       );
     }
@@ -153,14 +153,14 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(response.data, { status: response.status });
   } catch (error: any) {
     console.error(
-      "Error fetching job postings:",
+      "Error fetching event postings:",
       error?.response?.data || error.message,
     );
 
     return NextResponse.json(
       {
         message:
-          error.response?.data?.message || "Failed to fetch job postings.",
+          error.response?.data?.message || "Failed to fetch event postings.",
         error: error.message,
       },
       { status: error.response?.status || 500 },
