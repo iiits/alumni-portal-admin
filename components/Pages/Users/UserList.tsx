@@ -8,9 +8,14 @@ import NoData from "@/components/Commons/NoData";
 import Searching from "@/components/Commons/Searching";
 import { Button } from "@/components/ui/button";
 import { EyeIcon } from "lucide-react";
+import EditUserModal from "./EditUserModal";
 import UsersFilter from "./UserListFilter";
 
-const UserList: React.FC = () => {
+interface ListProps {
+  mainRefetch: () => void;
+}
+
+const UserList: React.FC<ListProps> = ({ mainRefetch }) => {
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
   const [appliedFilters, setAppliedFilters] = useState<UserFilters>({
@@ -145,6 +150,66 @@ const UserList: React.FC = () => {
     }, 600);
   };
 
+  const showColumns = [
+    {
+      accessorKey: "name",
+      header: "Name",
+    },
+    {
+      accessorKey: "collegeEmail",
+      header: "College Email",
+    },
+    {
+      accessorKey: "personalEmail",
+      header: "Personal Email",
+    },
+    {
+      accessorKey: "userId",
+      header: "User ID",
+    },
+    {
+      accessorKey: "username",
+      header: "Username",
+    },
+    {
+      accessorKey: "batch",
+      header: "Batch",
+    },
+    {
+      accessorKey: "department",
+      header: "Department",
+    },
+    {
+      accessorKey: "role",
+      header: "Role",
+    },
+    {
+      accessorKey: "verified",
+      header: "Verified",
+    },
+    {
+      id: "actions",
+      header: "Show More",
+      cell: ({ row }: { row: { original: any } }) => (
+        <EditUserModal
+          user={row.original}
+          trigger={
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Show details</span>
+              <EyeIcon />
+            </Button>
+          }
+          onSuccess={() => {
+            refetch();
+            mainRefetch();
+          }}
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+  ];
+
   return (
     <div className="space-y-8 shadow-md p-2">
       <h2 className="text-3xl font-semibold mt-4 ml-4">Manage Users</h2>
@@ -167,60 +232,5 @@ const UserList: React.FC = () => {
     </div>
   );
 };
-
-const showColumns = [
-  {
-    accessorKey: "name",
-    header: "Name",
-  },
-  {
-    accessorKey: "collegeEmail",
-    header: "College Email",
-  },
-  {
-    accessorKey: "personalEmail",
-    header: "Personal Email",
-  },
-  {
-    accessorKey: "userId",
-    header: "User ID",
-  },
-  {
-    accessorKey: "username",
-    header: "Username",
-  },
-  {
-    accessorKey: "batch",
-    header: "Batch",
-  },
-  {
-    accessorKey: "department",
-    header: "Department",
-  },
-  {
-    accessorKey: "role",
-    header: "Role",
-  },
-  {
-    accessorKey: "verified",
-    header: "Verified",
-  },
-  {
-    id: "actions",
-    header: "Show More",
-    cell: ({ row }: { row: { original: any } }) => (
-      <Button
-        variant="ghost"
-        className="h-8 w-8 p-0"
-        onClick={() => console.log(row.original)}
-      >
-        <span className="sr-only">Show details</span>
-        <EyeIcon />
-      </Button>
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-];
 
 export default UserList;

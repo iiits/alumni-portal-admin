@@ -15,10 +15,10 @@ export async function PUT(
     }
 
     const body = await req.json();
-    const updateData = body;
-    const { id: userId } = await context.params;
+    const { role, verified, department, batch, collegeEmail, userId } = body;
+    const { id } = await context.params;
 
-    if (!userId) {
+    if (!id) {
       return NextResponse.json(
         { message: "User ID is required" },
         { status: 400 },
@@ -26,8 +26,8 @@ export async function PUT(
     }
 
     const response = await axios.patch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/users/admin/${userId}`,
-      updateData,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/users/admin/${id}`,
+      { role, verified, department, batch, collegeEmail, userId },
       { headers: { Authorization: `Bearer ${token}` } },
     );
 

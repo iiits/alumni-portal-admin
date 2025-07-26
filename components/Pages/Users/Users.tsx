@@ -11,7 +11,7 @@ import Overview from "./Overview";
 import UserList from "./UserList";
 
 const Users: React.FC = () => {
-  const { data, error, isLoading } = useQuery<UserAnalytics>({
+  const { data, error, isLoading, refetch } = useQuery<UserAnalytics>({
     queryKey: ["userAnalytics"],
     queryFn: async () => {
       const response = await axiosInstance.get("/admin/users-analytics");
@@ -49,7 +49,7 @@ const Users: React.FC = () => {
     <div className="space-y-8">
       <Overview users={overview} unverified={unverified} />
       <BatchDepartment byBatch={byBatch} byDepartment={byDepartment} />
-      <UserList />
+      <UserList mainRefetch={refetch} />
     </div>
   );
 };
