@@ -5,16 +5,16 @@ import Searching from "@/components/Commons/Searching";
 import { axiosInstance } from "@/lib/api/axios";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import ContactUsList from "./ContactUsList";
 import { ContactUsAnalytics } from "./interface";
 import Overview from "./Overview";
 import Timeline from "./Timeline";
 
 const ContactUs: React.FC = () => {
-  const { data, error, isLoading } = useQuery<ContactUsAnalytics>({
+  const { data, error, isLoading, refetch } = useQuery<ContactUsAnalytics>({
     queryKey: ["contactUsAnalytics"],
     queryFn: async () => {
       const response = await axiosInstance.get("/admin/contacts-analytics");
-      console.log(response.data.data);
       return response.data.data;
     },
   });
@@ -47,6 +47,7 @@ const ContactUs: React.FC = () => {
     <div className="space-y-8">
       <Overview contacts={data} />
       <Timeline contacts={data} />
+      <ContactUsList mainRefetch={refetch} />
     </div>
   );
 };
