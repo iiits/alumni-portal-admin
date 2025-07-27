@@ -18,7 +18,7 @@ const TopLocations: React.FC<TopProps> = ({ locations }) => {
           barKey="count"
           nameKey="_id"
           color="#6366f1"
-          label="Top Companies"
+          label="Top Cities"
         />
       </div>
       <div className="md:h-[400px] lg:h-[500px] xl:h-[600px]">
@@ -27,7 +27,7 @@ const TopLocations: React.FC<TopProps> = ({ locations }) => {
           barKey="count"
           nameKey="_id"
           color="#6366f1"
-          label="Top Roles"
+          label="Top Countries"
         />
       </div>
     </div>

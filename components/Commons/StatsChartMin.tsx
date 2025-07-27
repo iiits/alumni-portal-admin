@@ -146,9 +146,7 @@ const StatsChart: React.FC<StatsChartProps> = ({
                 <div className="bg-background border rounded-lg px-3 py-2 shadow-xl text-xs lg:text-base">
                   <div className="font-semibold">Batch: {label}</div>
                   <div>Total: {d.total}</div>
-                  <div>Admin: {d.admin}</div>
                   <div>Alumni: {d.alumni}</div>
-                  <div>Student: {d.student}</div>
                   <div>Growth Rate: {d.growthRate}%</div>
                 </div>
               );
