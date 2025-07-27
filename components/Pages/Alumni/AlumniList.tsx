@@ -9,7 +9,7 @@ import Searching from "@/components/Commons/Searching";
 import { Button } from "@/components/ui/button";
 import { EyeIcon } from "lucide-react";
 import AlumniFilter from "./AlumniListFilter";
-import EditUserModal from "./EditUserModal";
+import EditAlumniModal from "./EditAlumniModal";
 
 interface ListProps {
   mainRefetch: () => void;
@@ -191,7 +191,7 @@ const AlumniList: React.FC<ListProps> = ({ mainRefetch }) => {
       id: "actions",
       header: "Show More",
       cell: ({ row }: { row: { original: any } }) => (
-        <EditUserModal
+        <EditAlumniModal
           user={row.original}
           trigger={
             <Button variant="ghost" className="h-8 w-8 p-0">
