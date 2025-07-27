@@ -8,8 +8,8 @@ import NoData from "@/components/Commons/NoData";
 import Searching from "@/components/Commons/Searching";
 import { Button } from "@/components/ui/button";
 import { EyeIcon, PlusIcon } from "lucide-react";
-import CreateJobModal from "./CreateJobModal";
-import EditJobModal from "./EditJobModal";
+import CreateReferralModal from "./CreateReferralModal";
+import EditReferralModal from "./EditReferralModal";
 import ReferralsFilter from "./ReferralListFilter";
 
 interface ListProps {
@@ -224,8 +224,8 @@ const ReferralList: React.FC<ListProps> = ({ mainRefetch }) => {
       id: "actions",
       header: "Show More",
       cell: ({ row }: { row: { original: any } }) => (
-        <EditJobModal
-          job={row.original}
+        <EditReferralModal
+          referral={row.original}
           trigger={
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Show details</span>
@@ -255,7 +255,7 @@ const ReferralList: React.FC<ListProps> = ({ mainRefetch }) => {
           onFilterChange={handleFilterChange}
           isChanged={isFilterChanged}
         />
-        <CreateJobModal
+        <CreateReferralModal
           onSuccess={() => {
             refetch();
             mainRefetch();
@@ -270,7 +270,28 @@ const ReferralList: React.FC<ListProps> = ({ mainRefetch }) => {
       </div>
       <DataList
         data={data.referrals}
-        columns={showColumns}
+        columns={showColumns.map((col) =>
+          col.id === "actions"
+            ? {
+                ...col,
+                cell: ({ row }: { row: { original: Referral } }) => (
+                  <EditReferralModal
+                    referral={row.original}
+                    trigger={
+                      <Button variant="ghost" className="h-8 w-8 p-0">
+                        <span className="sr-only">Show details</span>
+                        <EyeIcon />
+                      </Button>
+                    }
+                    onSuccess={() => {
+                      refetch();
+                      mainRefetch();
+                    }}
+                  />
+                ),
+              }
+            : col,
+        )}
         pagination={pagination}
         searchKey="numberOfReferrals"
         searchText={currentFilters.search}

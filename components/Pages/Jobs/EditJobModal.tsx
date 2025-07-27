@@ -306,45 +306,45 @@ const EditJobModal: React.FC<EditJobModalProps> = ({
               required
             />
           </LabelInputContainer>
-          <DialogFooter className="flex !flex-col gap-2 w-full">
-            <DialogClose asChild>
-              <div className="w-full">
-                <Button
-                  type="button"
-                  variant="outline"
-                  disabled={loading || editJobMutation.isPending}
-                  className="w-full"
-                  onClick={() => setOpen(false)}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </DialogClose>
-            <div className="flex gap-2 w-full">
-              <DeleteJobDialog
-                jobId={job.id}
-                onSuccess={() => {
-                  setOpen(false);
-                  onSuccess && onSuccess();
-                }}
-                trigger={
-                  <Button variant="destructive" className="w-1/2">
-                    Delete
-                  </Button>
-                }
-              />
+        </form>
+        <DialogFooter className="flex !flex-col gap-2 w-full">
+          <DialogClose asChild>
+            <div className="w-full">
               <Button
-                type="submit"
+                type="button"
+                variant="outline"
                 disabled={loading || editJobMutation.isPending}
-                className="w-1/2"
+                className="w-full"
+                onClick={() => setOpen(false)}
               >
-                {loading || editJobMutation.isPending
-                  ? "Saving..."
-                  : "Save Changes"}
+                Cancel
               </Button>
             </div>
-          </DialogFooter>
-        </form>
+          </DialogClose>
+          <div className="flex gap-2 w-full">
+            <DeleteJobDialog
+              jobId={job.id}
+              onSuccess={() => {
+                setOpen(false);
+                onSuccess && onSuccess();
+              }}
+              trigger={
+                <Button variant="destructive" className="w-1/2">
+                  Delete
+                </Button>
+              }
+            />
+            <Button
+              type="submit"
+              disabled={loading || editJobMutation.isPending}
+              className="w-1/2"
+            >
+              {loading || editJobMutation.isPending
+                ? "Saving..."
+                : "Save Changes"}
+            </Button>
+          </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
