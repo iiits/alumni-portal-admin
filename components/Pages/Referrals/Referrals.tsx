@@ -6,11 +6,12 @@ import { axiosInstance } from "@/lib/api/axios";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { ReferralsAnalytics } from "./interface";
+import ReferralList from "./ReferralList";
 import Overview from "./Overview";
 import TopReferrals from "./TopReferrals";
 
 const Referrals: React.FC = () => {
-  const { data, error, isLoading } = useQuery<ReferralsAnalytics>({
+  const { data, error, isLoading, refetch } = useQuery<ReferralsAnalytics>({
     queryKey: ["referralsAnalytics"],
     queryFn: async () => {
       const response = await axiosInstance.get("/admin/referrals-analytics");
@@ -46,6 +47,7 @@ const Referrals: React.FC = () => {
     <div className="space-y-8">
       <Overview referrals={data} />
       <TopReferrals referrals={data} />
+      <ReferralList mainRefetch={refetch} />
     </div>
   );
 };
