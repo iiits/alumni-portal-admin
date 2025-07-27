@@ -1,5 +1,6 @@
 import React from "react";
 
+import DataTable from "@/components/Commons/DataTable";
 import TopChart from "@/components/Commons/Top";
 import { JobsAnalytics } from "./interface";
 
@@ -30,15 +31,11 @@ const TopJobs: React.FC<TopProps> = ({ jobs }) => {
           label="Top Roles"
         />
       </div>
-      <div className="md:h-[400px] lg:h-[500px] xl:h-[600px]">
-        <TopChart
-          data={jobs.topPosters}
-          barKey="count"
-          nameKey="name"
-          color="#6366f1"
-          label="Top Job Posters"
-        />
-      </div>
+      <DataTable
+        data={jobs.topPosters}
+        heading="Top Job Posters"
+        seeMoreUrl="/jobs"
+      />
     </div>
   );
 };
