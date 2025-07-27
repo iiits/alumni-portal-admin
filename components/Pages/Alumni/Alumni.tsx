@@ -5,6 +5,7 @@ import Searching from "@/components/Commons/Searching";
 import { axiosInstance } from "@/lib/api/axios";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import AlumniList from "./AlumniList";
 import BatchDepartment from "./BatchDepartment";
 import { AlumniAnalytics } from "./interface";
 import JobType from "./JobType";
@@ -13,7 +14,7 @@ import TopJobs from "./TopJobs";
 import TopLocations from "./TopLocations";
 
 const Alumni: React.FC = () => {
-  const { data, error, isLoading } = useQuery<AlumniAnalytics>({
+  const { data, error, isLoading, refetch } = useQuery<AlumniAnalytics>({
     queryKey: ["alumniAnalytics"],
     queryFn: async () => {
       const response = await axiosInstance.get("/admin/alumni-analytics");
@@ -52,6 +53,7 @@ const Alumni: React.FC = () => {
       <TopJobs jobs={data.jobs} />
       <TopEducation education={data.education} />
       <TopLocations locations={data.locations} />
+      <AlumniList mainRefetch={refetch} />
     </div>
   );
 };

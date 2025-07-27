@@ -51,3 +51,73 @@ export interface Education {
   all: EducationInternal;
   ongoing: EducationInternal;
 }
+
+interface SocialMediaProfile {
+  type:
+    | "youtube"
+    | "reddit"
+    | "linkedin"
+    | "twitter"
+    | "instagram"
+    | "facebook"
+    | "discord"
+    | "github";
+  link: string;
+  visibility: "yes" | "no";
+}
+
+interface AlumniDetails {
+  id: string;
+  jobPosition: {
+    title: string;
+    company: string;
+    type: string;
+    start: Date;
+    end?: Date | null;
+    ongoing: boolean;
+    location: string;
+    jobType: string;
+    description?: string;
+  }[];
+  education: {
+    school: string;
+    degree: string;
+    fieldOfStudy: string;
+    start: Date;
+    end?: Date | null;
+    ongoing: boolean;
+    location: string;
+    description?: string;
+  }[];
+  location: {
+    city: string;
+    country: string;
+  };
+  expertise: string[];
+  verified: boolean;
+}
+
+export interface AlumniProfileData {
+  id: string;
+  name: string;
+  collegeEmail: string;
+  personalEmail: string;
+  userId: string;
+  username: string;
+  profilePicture: string;
+  batch: string;
+  department: string;
+  profiles: SocialMediaProfile[];
+  bio: string;
+  role: string;
+  alumniDetails: AlumniDetails;
+}
+
+export interface AlumniFilters {
+  page?: string;
+  limit?: string;
+  search?: string;
+  batch?: string;
+  department?: string;
+  verified?: string;
+}
